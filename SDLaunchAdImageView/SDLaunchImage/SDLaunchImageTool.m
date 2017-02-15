@@ -73,7 +73,7 @@ NSString *const SDAdDestUrl = @"dest_url";
 +(void)saveAdInfo:(NSDictionary*)adInfo
 {
     __weak __typeof(self)weakSelf = self;
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3.0f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
             
             [weakSelf saveSuccessed:adInfo];
@@ -87,28 +87,35 @@ NSString *const SDAdDestUrl = @"dest_url";
 {
     NSString *oldImagePath = [self adImagePath];
     
+    if (!adInfo) {
+        [self deleteFileWithPath:oldImagePath];
+        [self deleteFileWithPath:[self userInfoPath]];
+        return;
+    }
+    
     [adInfo writeToFile:[self userInfoPath] atomically:YES];
-    NSString *imageUrl = adInfo[SDAdImageUrl];
+    
     
     /////////
     NSString *newImagePath = [self adImagePath];
-    newImagePath = nil;
+    
     //获取到的最新的图片地址为空 或者和旧的图片地址不相同，则删除旧图片
     if ( newImagePath.length <=0 ||
         ![oldImagePath isEqualToString:newImagePath]) {
         if (oldImagePath && oldImagePath.length > 0) {
-            [self deleteOldImageWithPath:oldImagePath];
+            [self deleteFileWithPath:oldImagePath];
         }
         
     }
     
     if (![self isAdImageExist]) {
         //下载图片
+        NSString *imageUrl = adInfo[SDAdImageUrl];
         [self downloadAdImageWithUrl:imageUrl];
     }
 }
 
-+(void)deleteOldImageWithPath:(NSString*)imagePath
++(void)deleteFileWithPath:(NSString*)imagePath
 {
     if (imagePath) {
         [[NSFileManager defaultManager] removeItemAtPath:imagePath error:nil];

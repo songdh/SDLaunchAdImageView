@@ -13,7 +13,7 @@
 @interface SDAdImageView : UIImageView
 @property (nonatomic, assign) CGFloat aspectRadio;//广告图片的宽高比
 @property (nonatomic, assign) NSInteger delaySeconds;//广告展示的时间 s
-@property (nonatomic, copy  ) void (^tapActionBlock)(SDAdImageView *adImageView ,NSString *destUrl);
+@property (nonatomic, copy  ) BOOL (^tapActionBlock)(SDAdImageView *adImageView ,NSString *destUrl);
 
 -(void)show;
 -(void)dismiss;

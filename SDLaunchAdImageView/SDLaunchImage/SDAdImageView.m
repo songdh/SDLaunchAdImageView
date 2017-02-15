@@ -126,9 +126,10 @@
     [self.skipTimer invalidate];
     self.skipTimer = nil;
     
-    [UIView animateWithDuration:0.3f animations:^{
+    [UIView animateWithDuration:0.6f animations:^{
         
         self.alpha = 0;
+        self.transform = CGAffineTransformMakeScale(1.5,1.5);
         
     } completion:^(BOOL finished) {
         
@@ -139,8 +140,10 @@
 -(void)onGesture:(UITapGestureRecognizer*)tapGesture
 {
     if (self.tapActionBlock) {
-        self.tapActionBlock(self,[SDLaunchImageTool adDestPath]);
-        [self dismiss];
+        BOOL flag = self.tapActionBlock(self,[SDLaunchImageTool adDestPath]);
+        if (flag) {
+            [self dismiss];
+        }
     }
 }
 
