@@ -34,6 +34,7 @@
         [adImageView show];
         adImageView.tapActionBlock = ^(SDAdImageView *adImageView ,NSString *destUrl) {
             NSLog(@"点击开屏广告");
+            return YES;
         };
     }
     
